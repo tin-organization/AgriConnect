@@ -13,6 +13,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# to keep separate connection strings for database locally 
+AgriConnect/appsettings.Development.json
+
 # Mono auto generated files
 mono_crash.*
 
@@ -361,3 +364,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
