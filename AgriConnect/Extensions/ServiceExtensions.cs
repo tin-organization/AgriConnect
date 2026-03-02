@@ -3,8 +3,8 @@
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();
-        // Future: services.AddScoped<IProductService, ProductService>();
-        // Future: services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IConsultationService, ConsultationService>(); 
+        services.AddHttpClient<ConsultationService>();
 
         return services;
     }
