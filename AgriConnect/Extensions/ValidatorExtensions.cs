@@ -7,7 +7,7 @@ public static class ValidatorExtensions
         services.AddScoped<IValidator<RegisterDto>, RegisterValidator>();
         services.AddScoped<IValidator<LoginDto>, LoginValidator>();
         services.AddScoped<IValidator<UpdateProfileDto>, UpdateProfileValidator>();
-        // Future: services.AddScoped<IValidator<CreateProductDto>, CreateProductValidator>();
+        services.AddScoped<IValidator<AskQuestionDto>, AskQuestionValidator>();
 
         return services;
     }
