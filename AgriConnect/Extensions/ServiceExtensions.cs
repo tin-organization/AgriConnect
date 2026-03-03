@@ -8,7 +8,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();
-<<<<<<< agriBlog
+
         // Future: services.AddScoped<IProductService, ProductService>();
         // Future: services.AddScoped<IOrderService, OrderService>();
         
@@ -19,10 +19,12 @@ public static class ServiceExtensions
         services.AddScoped<IValidator<CreateBlogDto>, CreateBlogValidator>();
         services.AddScoped<IValidator<UpdateBlogDto>, UpdateBlogValidator>();
         services.AddScoped<IValidator<AddCommentDto>, AddCommentValidator>();
-=======
+
         services.AddScoped<IConsultationService, ConsultationService>(); 
         services.AddHttpClient<ConsultationService>();
->>>>>>> dev
+
+        services.AddScoped<IProduceService, ProduceService>();
+
 
         return services;
     }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AgriConnect.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260303004029_AddProduceTable")]
+    partial class AddProduceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,11 +24,7 @@ namespace AgriConnect.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-<<<<<<< agriBlog
-            modelBuilder.Entity("AgriConnect.Models.Blog", b =>
-=======
             modelBuilder.Entity("Consultation", b =>
->>>>>>> dev
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,24 +32,6 @@ namespace AgriConnect.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-<<<<<<< agriBlog
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-=======
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -63,7 +44,6 @@ namespace AgriConnect.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
->>>>>>> dev
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
@@ -73,43 +53,7 @@ namespace AgriConnect.Migrations
 
                     b.HasIndex("UserId");
 
-<<<<<<< agriBlog
-                    b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("AgriConnect.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CommentatorName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("Comments");
-=======
                     b.ToTable("Consultations");
->>>>>>> dev
                 });
 
             modelBuilder.Entity("Produce", b =>
@@ -211,11 +155,7 @@ namespace AgriConnect.Migrations
                     b.ToTable("Users");
                 });
 
-<<<<<<< agriBlog
-            modelBuilder.Entity("AgriConnect.Models.Blog", b =>
-=======
             modelBuilder.Entity("Consultation", b =>
->>>>>>> dev
                 {
                     b.HasOne("User", "User")
                         .WithMany()
@@ -225,25 +165,6 @@ namespace AgriConnect.Migrations
 
                     b.Navigation("User");
                 });
-<<<<<<< agriBlog
-
-            modelBuilder.Entity("AgriConnect.Models.Comment", b =>
-                {
-                    b.HasOne("AgriConnect.Models.Blog", "Blog")
-                        .WithMany("Comments")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-                });
-
-            modelBuilder.Entity("AgriConnect.Models.Blog", b =>
-                {
-                    b.Navigation("Comments");
-                });
-=======
->>>>>>> dev
 #pragma warning restore 612, 618
         }
     }
