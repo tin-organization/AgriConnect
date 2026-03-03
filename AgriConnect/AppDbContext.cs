@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AgriConnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
@@ -8,4 +9,6 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Blog>    Blogs    { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }
