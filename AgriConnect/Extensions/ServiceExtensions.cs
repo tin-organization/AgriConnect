@@ -5,6 +5,7 @@
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IConsultationService, ConsultationService>(); 
         services.AddHttpClient<ConsultationService>();
+        services.AddScoped<IProduceService, ProduceService>();
 
         return services;
     }

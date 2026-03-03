@@ -9,6 +9,8 @@ public static class ValidatorExtensions
         services.AddScoped<IValidator<UpdateProfileDto>, UpdateProfileValidator>();
         services.AddScoped<IValidator<AskQuestionDto>, AskQuestionValidator>();
 
+        services.AddScoped<IValidator<CreateProduceDto>, CreateProduceValidator>();
+        services.AddScoped<IValidator<UpdateProduceDto>, UpdateProduceValidator>();
         return services;
     }
 }
