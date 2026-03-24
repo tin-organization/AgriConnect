@@ -24,7 +24,7 @@ public static class ServiceExtensions
         services.AddHttpClient<ConsultationService>();
 
         services.AddScoped<IProduceService, ProduceService>();
-
+        services.AddScoped<IEquipmentService, EquipmentService>();
 
         return services;
     }

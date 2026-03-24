@@ -11,6 +11,8 @@ public static class ValidatorExtensions
 
         services.AddScoped<IValidator<CreateProduceDto>, CreateProduceValidator>();
         services.AddScoped<IValidator<UpdateProduceDto>, UpdateProduceValidator>();
+        services.AddScoped<IValidator<CreateEquipmentDto>, CreateEquipmentValidator>();
+        services.AddScoped<IValidator<UpdateEquipmentDto>, UpdateEquipmentValidator>();
         return services;
     }
 }
