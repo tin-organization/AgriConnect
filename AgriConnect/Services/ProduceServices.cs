@@ -56,16 +56,57 @@ public class ProduceService : IProduceService
         return (true, "Success.", produces);
     }
 
+    
     public async Task<(bool, string, List<ProduceResponseDto>?)> SearchAsync(string query)
     {
-        var produces = await _db.Produces
-            .Where(p => p.Title.Contains(query)
-                     || p.Description.Contains(query)
-                     || p.Location.Contains(query))
-            .Select(p => ToDto(p))
-            .ToListAsync();
+        var normalizedQuery = query.ToLower();
+        var produces = await _db.Produces.ToListAsync();
 
-        return (true, "Success.", produces);
+        var result = produces
+            .Where(p =>
+                p.Title.Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase) ||
+                p.Description.Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase) ||
+                p.Location.Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase) ||
+                IsSimilar(p.Title, normalizedQuery) ||
+                IsSimilar(p.Location, normalizedQuery))
+            .OrderBy(p => LevenshteinDistance(p.Title.ToLower(), normalizedQuery))
+            .Select(p => ToDto(p))
+            .ToList();
+
+        return (true, "Success.", result);
+    }
+
+    private static bool IsSimilar(string source, string query, int threshold = 5)
+    {
+        var words = source.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return words.Any(word =>
+        {
+        var normalizedWord = word.ToLower();
+        return normalizedWord.StartsWith(query) ||          // "fre" matches "fresh"
+               normalizedWord.Contains(query) ||            // "fres" matches "fresh"
+               LevenshteinDistance(normalizedWord, query) <= threshold;
+        });
+    } 
+
+    private static int LevenshteinDistance(string a, string b)
+    {
+        int[,] matrix = new int[a.Length + 1, b.Length + 1];
+
+        for (int i = 0; i <= a.Length; i++) matrix[i, 0] = i;
+        for (int j = 0; j <= b.Length; j++) matrix[0, j] = j;
+
+        for (int i = 1; i <= a.Length; i++)
+        {
+            for (int j = 1; j <= b.Length; j++)
+            {
+                int cost = a[i - 1] == b[j - 1] ? 0 : 1;
+                matrix[i, j] = Math.Min(
+                    Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
+                    matrix[i - 1, j - 1] + cost);
+            }
+        }
+
+        return matrix[a.Length, b.Length];
     }
 
     public async Task<(bool, string, ProduceResponseDto?)> UpdateAsync(int id, UpdateProduceDto dto)
