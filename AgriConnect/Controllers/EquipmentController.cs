@@ -56,8 +56,8 @@ public class EquipmentController : ControllerBase
         return Ok(new { message, data });
     }
 
-    // PUT /api/equipment/{id}
-    [HttpPut("{id}")]
+    // POST /api/equipment/update/{id}
+    [HttpPost("update/{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEquipmentDto dto)
     {
         var validation = await _updateValidator.ValidateAsync(dto);

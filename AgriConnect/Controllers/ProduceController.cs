@@ -57,8 +57,8 @@ public class ProduceController : ControllerBase
         return Ok(new { message, data });
     }
 
-    // PUT /api/produce/{id}
-    [HttpPut("{id}")]
+    // POST /api/produce/update/{id}
+    [HttpPost("update/{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateProduceDto dto)
     {
         var validation = await _updateValidator.ValidateAsync(dto);

@@ -19,4 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Produce> Produces { get; set; }
 
     public DbSet<Equipment> Equipments { get; set; }
+
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Income> Incomes { get; set; }
 }
