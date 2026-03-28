@@ -33,6 +33,7 @@ public class ProduceResponseDto
     public decimal Price { get; set; }
     public Unit Unit { get; set; }
     public double AvailableUnitsLeft { get; set; }
+    public double InitialUnitsLeft { get; set; }      // NEW
     public string Location { get; set; } = "";
     public DateTime HarvestDate { get; set; }
     public DateTime ExpiryDate { get; set; }

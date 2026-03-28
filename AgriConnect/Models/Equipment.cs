@@ -53,6 +53,8 @@ public class Equipment
     public string Model { get; set; } = "";
     public bool IsAvailable { get; set; } = true;
 
+    public int SellerId { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

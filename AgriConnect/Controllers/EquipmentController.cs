@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [ApiController]
 [Authorize]
@@ -21,14 +22,16 @@ public class EquipmentController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    private int GetUserId() =>
+        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);  // NEW
+
     // POST /api/equipment
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEquipmentDto dto)
     {
         var validation = await _createValidator.ValidateAsync(dto);
         if (!validation.IsValid) return BadRequest(validation.Errors);
-
-        var (success, message, data) = await _equipmentService.CreateAsync(dto);
+        var (success, message, data) = await _equipmentService.CreateAsync(GetUserId(), dto); // CHANGED
         return success ? Ok(new { message, data }) : BadRequest(new { message });
     }
 
@@ -56,13 +59,12 @@ public class EquipmentController : ControllerBase
         return Ok(new { message, data });
     }
 
-    // PUT /api/equipment/{id}
-    [HttpPut("{id}")]
+    // POST /api/equipment/update/{id}
+    [HttpPost("update/{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEquipmentDto dto)
     {
         var validation = await _updateValidator.ValidateAsync(dto);
         if (!validation.IsValid) return BadRequest(validation.Errors);
-
         var (success, message, data) = await _equipmentService.UpdateAsync(id, dto);
         return success ? Ok(new { message, data }) : NotFound(new { message });
     }

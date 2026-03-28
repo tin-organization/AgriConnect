@@ -9,7 +9,7 @@ public class CreateEquipmentValidator : AbstractValidator<CreateEquipmentDto>
         RuleFor(x => x.Type).IsInEnum();
         RuleFor(x => x.Price).GreaterThan(0);
         RuleFor(x => x.Location).NotEmpty();
-        RuleFor(x => x.ManufacturingDate).NotEmpty().LessThanOrEqualTo(DateTime.UtcNow);
+        RuleFor(x => x.ManufacturingDate).NotEmpty().LessThanOrEqualTo(_ => DateTime.UtcNow);
         RuleFor(x => x.ListingType).IsInEnum();
         RuleFor(x => x.Condition).IsInEnum();
     }
@@ -24,7 +24,7 @@ public class UpdateEquipmentValidator : AbstractValidator<UpdateEquipmentDto>
         RuleFor(x => x.Type).IsInEnum();
         RuleFor(x => x.Price).GreaterThan(0);
         RuleFor(x => x.Location).NotEmpty();
-        RuleFor(x => x.ManufacturingDate).NotEmpty().LessThanOrEqualTo(DateTime.UtcNow);
+        RuleFor(x => x.ManufacturingDate).NotEmpty().LessThanOrEqualTo(_ => DateTime.UtcNow);
         RuleFor(x => x.ListingType).IsInEnum();
         RuleFor(x => x.Condition).IsInEnum();
     }

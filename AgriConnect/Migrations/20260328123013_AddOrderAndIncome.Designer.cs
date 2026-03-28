@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AgriConnect.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260328123013_AddOrderAndIncome")]
+    partial class AddOrderAndIncome
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,9 +166,6 @@ namespace AgriConnect.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -234,9 +234,6 @@ namespace AgriConnect.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -287,18 +284,12 @@ namespace AgriConnect.Migrations
                     b.Property<DateTime>("HarvestDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<double>("InitialUnitsLeft")
-                        .HasColumnType("double precision");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
-
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()

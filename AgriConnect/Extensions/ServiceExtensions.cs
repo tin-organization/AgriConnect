@@ -26,6 +26,11 @@ public static class ServiceExtensions
         services.AddScoped<IProduceService, ProduceService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
 
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IIncomeService, IncomeService>();
+
+        services.AddScoped<IInventoryService, InventoryService>();
+
         return services;
     }
 }

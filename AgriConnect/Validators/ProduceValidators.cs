@@ -11,7 +11,7 @@ public class CreateProduceValidator : AbstractValidator<CreateProduceDto>
         RuleFor(x => x.Unit).IsInEnum();
         RuleFor(x => x.AvailableUnitsLeft).GreaterThanOrEqualTo(0);
         RuleFor(x => x.Location).NotEmpty();
-        RuleFor(x => x.HarvestDate).NotEmpty().LessThanOrEqualTo(DateTime.UtcNow);
+        RuleFor(x => x.HarvestDate).NotEmpty().LessThanOrEqualTo(_ => DateTime.UtcNow);
         RuleFor(x => x.ExpiryDate).NotEmpty().GreaterThan(x => x.HarvestDate);
     }
 }
@@ -27,7 +27,7 @@ public class UpdateProduceValidator : AbstractValidator<UpdateProduceDto>
         RuleFor(x => x.Unit).IsInEnum();
         RuleFor(x => x.AvailableUnitsLeft).GreaterThanOrEqualTo(0);
         RuleFor(x => x.Location).NotEmpty();
-        RuleFor(x => x.HarvestDate).NotEmpty().LessThanOrEqualTo(DateTime.UtcNow);
+        RuleFor(x => x.HarvestDate).NotEmpty().LessThanOrEqualTo(_ => DateTime.UtcNow);
         RuleFor(x => x.ExpiryDate).NotEmpty().GreaterThan(x => x.HarvestDate);
     }
 }
