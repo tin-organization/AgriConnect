@@ -15,13 +15,16 @@ public static class AuthExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = config["Jwt:Issuer"],
-                    ValidAudience = config["Jwt:Audience"],
+                    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
+                                  ?? config["Jwt:Issuer"],
+                    ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
+                                    ?? config["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
+                        Encoding.UTF8.GetBytes(
+                            Environment.GetEnvironmentVariable("JWT_KEY")
+                            ?? config["Jwt:Key"]!))
                 };
             });
-
         services.AddAuthorization();
         return services;
     }
