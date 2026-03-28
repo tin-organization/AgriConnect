@@ -46,6 +46,7 @@ public class OrderService : IOrderService
                 var order = new Order
                 {
                     UserId = userId,
+                    SellerId = produce.SellerId,
                     ItemType = ItemType.Produce,
                     ProduceId = produce.Id,
                     Quantity = dto.Quantity,
@@ -87,6 +88,7 @@ public class OrderService : IOrderService
                 var order = new Order
                 {
                     UserId = userId,
+                    SellerId = equipment.SellerId,
                     ItemType = ItemType.Equipment,
                     EquipmentId = equipment.Id,
                     Quantity = 1,
@@ -172,7 +174,14 @@ public class OrderService : IOrderService
                 return (false, $"Cannot increase quantity. Only {produce.AvailableUnitsLeft} {produce.Unit} additional stock available.", null);
 
             // Restore or deduct based on diff
-            produce.AvailableUnitsLeft -= quantityDiff;
+            var newStock = produce.AvailableUnitsLeft - quantityDiff;
+
+            if (newStock < 0)
+            {
+                return (false, "Stock cannot go negative.", null);
+            }
+
+            produce.AvailableUnitsLeft = newStock;
             produce.UpdatedAt = DateTime.UtcNow;
 
             var newTotal = (decimal)dto.Quantity * order.PriceSnapshot;

@@ -22,14 +22,16 @@ public class ProduceController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    private int GetUserId() =>
+        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
     // POST /api/produce
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateProduceDto dto)
     {
         var validation = await _createValidator.ValidateAsync(dto);
         if (!validation.IsValid) return BadRequest(validation.Errors);
-
-        var (success, message, data) = await _produceService.CreateAsync(dto);
+        var (success, message, data) = await _produceService.CreateAsync(GetUserId(), dto); // CHANGED
         return success ? Ok(new { message, data }) : BadRequest(new { message });
     }
 
@@ -63,7 +65,6 @@ public class ProduceController : ControllerBase
     {
         var validation = await _updateValidator.ValidateAsync(dto);
         if (!validation.IsValid) return BadRequest(validation.Errors);
-
         var (success, message, data) = await _produceService.UpdateAsync(id, dto);
         return success ? Ok(new { message, data }) : NotFound(new { message });
     }

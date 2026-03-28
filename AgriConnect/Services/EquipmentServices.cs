@@ -2,7 +2,7 @@
 
 public interface IEquipmentService
 {
-    Task<(bool Success, string Message, EquipmentResponseDto? Data)> CreateAsync(CreateEquipmentDto dto);
+    Task<(bool Success, string Message, EquipmentResponseDto? Data)> CreateAsync(int sellerId, CreateEquipmentDto dto);
     Task<(bool Success, string Message, EquipmentResponseDto? Data)> GetByIdAsync(int id);
     Task<(bool Success, string Message, List<EquipmentResponseDto>? Data)> GetAllAsync();
     Task<(bool Success, string Message, List<EquipmentResponseDto>? Data)> SearchAsync(string query);
@@ -19,10 +19,11 @@ public class EquipmentService : IEquipmentService
         _db = db;
     }
 
-    public async Task<(bool, string, EquipmentResponseDto?)> CreateAsync(CreateEquipmentDto dto)
+    public async Task<(bool, string, EquipmentResponseDto?)> CreateAsync(int sellerId, CreateEquipmentDto dto)
     {
         var equipment = new Equipment
         {
+            SellerId = sellerId,            // NEW
             Title = dto.Title,
             Description = dto.Description,
             Type = dto.Type,
@@ -44,7 +45,6 @@ public class EquipmentService : IEquipmentService
     {
         var equipment = await _db.Equipments.FindAsync(id);
         if (equipment is null) return (false, "Equipment not found.", null);
-
         return (true, "Success.", ToDto(equipment));
     }
 
@@ -53,7 +53,6 @@ public class EquipmentService : IEquipmentService
         var equipments = await _db.Equipments
             .Select(e => ToDto(e))
             .ToListAsync();
-
         return (true, "Success.", equipments);
     }
 
@@ -126,12 +125,9 @@ public class EquipmentService : IEquipmentService
     private static int LevenshteinDistance(string a, string b)
     {
         int[,] matrix = new int[a.Length + 1, b.Length + 1];
-
         for (int i = 0; i <= a.Length; i++) matrix[i, 0] = i;
         for (int j = 0; j <= b.Length; j++) matrix[0, j] = j;
-
         for (int i = 1; i <= a.Length; i++)
-        {
             for (int j = 1; j <= b.Length; j++)
             {
                 int cost = a[i - 1] == b[j - 1] ? 0 : 1;
@@ -139,8 +135,6 @@ public class EquipmentService : IEquipmentService
                     Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
                     matrix[i - 1, j - 1] + cost);
             }
-        }
-
         return matrix[a.Length, b.Length];
     }
 

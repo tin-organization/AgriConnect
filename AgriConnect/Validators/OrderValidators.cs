@@ -11,8 +11,8 @@ public class CreateOrderValidator : AbstractValidator<CreateOrderDto>
             .GreaterThan(0).WithMessage("A valid item ID is required.");
 
         RuleFor(x => x.Quantity)
-            .GreaterThan(0).WithMessage("Quantity must be greater than 0.")
-            .When(x => x.ItemType == ItemType.Produce);
+            .GreaterThan(0)
+            .WithMessage("Quantity must be greater than 0.");
     }
 }
 

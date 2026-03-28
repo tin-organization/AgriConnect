@@ -20,6 +20,8 @@ public class Order
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
+    public int SellerId { get; set; }
+
     [Required]
     public ItemType ItemType { get; set; }
 

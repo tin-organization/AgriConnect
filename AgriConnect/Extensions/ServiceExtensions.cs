@@ -29,6 +29,8 @@ public static class ServiceExtensions
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IIncomeService, IncomeService>();
 
+        services.AddScoped<IInventoryService, InventoryService>();
+
         return services;
     }
 }

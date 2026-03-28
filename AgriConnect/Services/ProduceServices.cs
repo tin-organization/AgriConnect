@@ -2,7 +2,7 @@
 
 public interface IProduceService
 {
-    Task<(bool Success, string Message, ProduceResponseDto? Data)> CreateAsync(CreateProduceDto dto);
+    Task<(bool Success, string Message, ProduceResponseDto? Data)> CreateAsync(int sellerId, CreateProduceDto dto);
     Task<(bool Success, string Message, ProduceResponseDto? Data)> GetByIdAsync(int id);
     Task<(bool Success, string Message, List<ProduceResponseDto>? Data)> GetAllAsync();
     Task<(bool Success, string Message, List<ProduceResponseDto>? Data)> SearchAsync(string query);
@@ -19,16 +19,18 @@ public class ProduceService : IProduceService
         _db = db;
     }
 
-    public async Task<(bool, string, ProduceResponseDto?)> CreateAsync(CreateProduceDto dto)
+    public async Task<(bool, string, ProduceResponseDto?)> CreateAsync(int sellerId, CreateProduceDto dto)
     {
         var produce = new Produce
         {
+            SellerId = sellerId,                        // NEW
             Title = dto.Title,
             Description = dto.Description,
             Category = dto.Category,
             Price = dto.Price,
             Unit = dto.Unit,
             AvailableUnitsLeft = dto.AvailableUnitsLeft,
+            InitialUnitsLeft = dto.AvailableUnitsLeft,  // NEW
             Location = dto.Location,
             HarvestDate = dto.HarvestDate,
             ExpiryDate = dto.ExpiryDate
@@ -43,7 +45,6 @@ public class ProduceService : IProduceService
     {
         var produce = await _db.Produces.FindAsync(id);
         if (produce is null) return (false, "Produce not found.", null);
-
         return (true, "Success.", ToDto(produce));
     }
 
@@ -52,11 +53,9 @@ public class ProduceService : IProduceService
         var produces = await _db.Produces
             .Select(p => ToDto(p))
             .ToListAsync();
-
         return (true, "Success.", produces);
     }
 
-    
     public async Task<(bool, string, List<ProduceResponseDto>?)> SearchAsync(string query)
     {
         var normalizedQuery = query.ToLower();
@@ -81,22 +80,19 @@ public class ProduceService : IProduceService
         var words = source.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         return words.Any(word =>
         {
-        var normalizedWord = word.ToLower();
-        return normalizedWord.StartsWith(query) ||          // "fre" matches "fresh"
-               normalizedWord.Contains(query) ||            // "fres" matches "fresh"
-               LevenshteinDistance(normalizedWord, query) <= threshold;
+            var normalizedWord = word.ToLower();
+            return normalizedWord.StartsWith(query) ||
+                   normalizedWord.Contains(query) ||
+                   LevenshteinDistance(normalizedWord, query) <= threshold;
         });
-    } 
+    }
 
     private static int LevenshteinDistance(string a, string b)
     {
         int[,] matrix = new int[a.Length + 1, b.Length + 1];
-
         for (int i = 0; i <= a.Length; i++) matrix[i, 0] = i;
         for (int j = 0; j <= b.Length; j++) matrix[0, j] = j;
-
         for (int i = 1; i <= a.Length; i++)
-        {
             for (int j = 1; j <= b.Length; j++)
             {
                 int cost = a[i - 1] == b[j - 1] ? 0 : 1;
@@ -104,8 +100,6 @@ public class ProduceService : IProduceService
                     Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
                     matrix[i - 1, j - 1] + cost);
             }
-        }
-
         return matrix[a.Length, b.Length];
     }
 
@@ -120,6 +114,7 @@ public class ProduceService : IProduceService
         produce.Price = dto.Price;
         produce.Unit = dto.Unit;
         produce.AvailableUnitsLeft = dto.AvailableUnitsLeft;
+        // InitialUnitsLeft never updated — permanent record
         produce.Location = dto.Location;
         produce.HarvestDate = dto.HarvestDate;
         produce.ExpiryDate = dto.ExpiryDate;
@@ -148,6 +143,7 @@ public class ProduceService : IProduceService
         Price = p.Price,
         Unit = p.Unit,
         AvailableUnitsLeft = p.AvailableUnitsLeft,
+        InitialUnitsLeft = p.InitialUnitsLeft,          // NEW
         Location = p.Location,
         HarvestDate = p.HarvestDate,
         ExpiryDate = p.ExpiryDate,
