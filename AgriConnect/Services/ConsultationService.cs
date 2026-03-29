@@ -45,8 +45,11 @@ public class ConsultationService : IConsultationService
 
     public async Task<(bool, string, ConsultationResponseDto?)> AskAsync(int userId, AskQuestionDto dto)
     {
-        var apiKey = _config["Gemini:ApiKey"];
-        var url = $"{_config["Gemini:Url"]}?key={apiKey}";
+        var apiKey = Environment.GetEnvironmentVariable("Gemini__ApiKey")
+             ?? _config["Gemini:ApiKey"];
+        var baseUrl = Environment.GetEnvironmentVariable("Gemini__Url")
+                      ?? _config["Gemini:Url"];
+        var url = $"{baseUrl}?key={apiKey}";
 
         // Build Gemini request body
         var requestBody = new
